@@ -1,70 +1,65 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import Header from './components/ui/Header/Header'
+import Library from './components/Library';
+import AddBook from './components/AddBook';
+
+const apiKey = 'kJ0Ha';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <Header />
-        <div className="container">
-          <div className="row form-section">
-            <form className="book-form col-6">
-              <legend>Lägg till dina favoritböcker</legend>
-              <div className="form-group">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="title"
-                  aria-describedby="title"
-                  placeholder="Lägg till titel"
-                />
 
-                <input
-                  type="text"
-                  className="form-control"
-                  id="author"
-                  rows="3"
-                  data-gramm="true"
-                  data-txt_gramm_id="63b74fb6-c7e4-7f0e-0c1f-438d47ac87a0"
-                  data-gramm_id="63b74fb6-c7e4-7f0e-0c1f-438d47ac87a0"
-                  data-gramm_editor="true"
-                  placeholder="Lägg till författare"
-                />
-              </div>
-              <button
-                type="submit"
-                className="btn btn-primary btn-lg btn-block"
-              >
-                Skicka
-              </button>
-            </form>
-          </div>
-        </div>
-        <div className="display-books">
-          <div className="container">
-            <div className="col-12">
-              <ul className="list-group">
-                <li className="list-item list-group-item d-flex align-items-center">
-                  <strong className="title">Titel</strong>
+    state = {
+        books: [
+        ]
+    }
 
-                  <div className="author">Författare</div>
+    addBook = (title, author) => {
+        const newBook = {
+            title,
+            author
+        };
 
-                  <div className="buttons">
-                    <button type="button" className="btn btn-success">
-                      Editera
-                    </button>
-                    <button type="button" className="btn btn-danger">
-                      Ta bort
-                    </button>
-                  </div>
-                </li>
-              </ul>
+        fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=insert&key=${apiKey}&title=${newBook.title}&author=${newBook.author}`, {
+            method: "POST",
+            mode: "cors", // no-cors, cors, *same-origin
+        }).then((response) => console.log(response));
+    }
+
+    delBook = (id) => {
+        this.setState({ books:
+                [...this.state.books.filter(book => book.id !== id)]})
+    }
+
+    //Api nyckel: kJ0Ha
+    componentDidMount(){
+        //Select Books
+        fetch('https://www.forverkliga.se/JavaScript/api/crud.php?op=select&key=' + apiKey)
+            .then(response => response.json()
+                .then(data => data.status === 'success' ? this.setState({books: data.data}) : 1 )
+                .catch(error => console.log(error)));
+    }
+
+    render() {
+        console.log(this.state.books);
+        return (
+            <div className="App">
+                <Header/>
+                <div className="container">
+                    <div className="row form-section">
+                        <AddBook addBook={this.addBook}/>
+                    </div>
+                </div>
+                <div className="display-books">
+                    <div className="container">
+                        <div className="col-12">
+                            <ul className="list-group">
+                                <Library delBook={this.delBook} books={this.state.books}/>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
+        )
+    }
 }
 
 export default App
