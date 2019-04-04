@@ -8,7 +8,6 @@ class AddBook extends React.Component{
     }
 
     onSubmit = (e) => {
-        console.log(this.state.author, this.state.title);
         e.preventDefault();
         this.props.addBook(this.state.title, this.state.author);
         this.setState({title: '', author: ''});
