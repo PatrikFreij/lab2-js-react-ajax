@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 class Book extends React.Component{
     render(){
+        console.log("En book laddades");
         const {id, title, author, updated} = this.props.book;
         return (
             <li className="list-item list-group-item d-flex align-items-center">
