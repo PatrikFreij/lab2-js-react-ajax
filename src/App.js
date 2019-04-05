@@ -21,11 +21,7 @@ class App extends Component {
     }
 
     addBook = (title, author) => {
-        const newBook = {
-            title,
-            author
-        };
-        fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=insert&key=${apiKey}&title=${newBook.title}&author=${newBook.author}`)
+        fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=insert&key=${apiKey}&title=${title}&author=${author}`)
             .then(resp => resp.json())
             .then((data) => {
                 if (data.status !== "success" && count <= 10) {
@@ -48,6 +44,21 @@ class App extends Component {
                     this.delBook(id);
                 }
                 count = 0;
+                this.selectBooks();
+            });
+    }
+
+    modifyBook = (title, author, id) => {
+        console.log(title, author, id);
+        fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=update&key=${apiKey}&id=${id}&title=${title}&author=${author}`)
+            .then(resp => resp.json())
+            .then((data) => {
+                if (data.status !== "success" && count <= 10) {
+                    this.setState({ error: true });
+                    this.modifyBook(title, author, id);
+                    count++;
+                    console.log("modify book count: " + count);
+                }
                 this.selectBooks();
             });
     }
@@ -85,7 +96,8 @@ class App extends Component {
                     <div className="container">
                         <div className="col-12">
                             <ul className="list-group">
-                                <Library delBook={this.delBook} books={this.state.books} />
+                                <Library delBook={this.delBook} books={this.state.books}
+                                modifyBook={this.modifyBook} />
                             </ul>
                         </div>
                     </div>
