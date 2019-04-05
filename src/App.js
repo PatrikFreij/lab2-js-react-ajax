@@ -2,20 +2,24 @@ import React, { Component } from 'react'
 import Header from './components/ui/Header/Header'
 import Library from './components/Library';
 import AddBook from './components/AddBook';
+import KeyStorage from './components/KeyStorage';
+import ErrorNotification from './components/ErrorNotification';
 
-const apiKey = 'kJ0Ha';
-let count = 0;
-
+let count = 1;
+const apiKey = localStorage.getItem("API-Key");
+// const apiKey = "kJ0Ha";
 
 class App extends Component {
 
     state = {
-        books: []
+        books: [],
+        error: false
     }
-    //Api nyckel: kJ0Ha
+
     componentDidMount = () => {
         this.selectBooks();
     }
+
     addBook = (title, author) => {
         const newBook = {
             title,
@@ -25,10 +29,11 @@ class App extends Component {
             .then(resp => resp.json())
             .then((data) => {
                 if (data.status !== "success" && count <= 10) {
-                    count++;
+                    this.setState({ error: true });
                     this.addBook(title, author);
+                    count++;
+                    console.log("add book count: " + count);
                 }
-                count = 0;
                 this.selectBooks();
             });
     }
@@ -38,6 +43,7 @@ class App extends Component {
             .then(resp => resp.json())
             .then((data) => {
                 if (data.status !== "success" && count <= 10) {
+                    this.setState({ error: true });
                     count++;
                     this.delBook(id);
                 }
@@ -51,37 +57,25 @@ class App extends Component {
             .then(response => response.json())
             .then((data) => {
                 if (data.status !== "success" && count <= 10) {
+                    this.setState({ error: true });
                     count++;
+                    console.log("select book count: " + count);
                     this.selectBooks();
+                } else {
+                    count = 0;
+                    this.setState({ books: data.data });
                 }
-                count = 0;
-                this.setState({ books: data.data });
 
             });
     };
-    /*
-        checkError = (operation, data) => {
-            if (data.status !== "success") {
-                switch(operation){
-                    case "delete":
-                        this.delBook(data.data.id);
-                        break;
-                    case "add":
-                        this.addBook()
-                }
-                console.log("Failed to fetch data. Reason: " + data.message);
-                count++;
-                this.selectBooks();
-            } else {
-                console.log();
-                this.setState({books:data.data});
-            }
-        }*/
 
     render() {
+        console.log("Sidan laddades");
         return (
             <div className="App">
                 <Header />
+                <KeyStorage />
+                <ErrorNotification count={count} />
                 <div className="container">
                     <div className="row form-section">
                         <AddBook addBook={this.addBook} />
