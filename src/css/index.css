@@ -66,9 +66,15 @@ header strong {
   background-size: 1px 1000px;
 }
 
-.list-item .title,
-.list-item .author {
-  flex: 1 1 30%;
+.title-author-container {
+  flex: 1 1 0%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.title,
+.author {
+  
 }
 
 .list-item .buttons {

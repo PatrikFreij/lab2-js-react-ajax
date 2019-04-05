@@ -8,7 +8,8 @@ class Library extends Component {
         console.log("Library laddades");
         return(
             this.props.books.map((book) => (
-                <Book delBook={this.props.delBook} book={book}/>
+                <Book delBook={this.props.delBook} book={book}
+                modifyBook={this.props.modifyBook}/>
             ))
         )
     }
