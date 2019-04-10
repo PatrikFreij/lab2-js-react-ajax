@@ -7,7 +7,6 @@ import ErrorNotification from './components/ErrorNotification';
 
 const apiKey = localStorage.getItem("API-Key");
 
-
 class App extends Component {
 
     constructor(props) {
@@ -22,6 +21,7 @@ class App extends Component {
 
     componentDidMount = () => {
         this.selectBooks();
+        this.getInitialAPIKey();
     };
 
     addBook = (title, author) => {
@@ -62,8 +62,6 @@ class App extends Component {
     };
 
     modifyBook = (title, author, id) => {
-        console.log("Title: " + title);
-
         if(title === ""){
             for (let i = 0; i < this.state.books.length; i++) {
                 if (this.state.books[i].id === id) {
@@ -98,7 +96,6 @@ class App extends Component {
     };
 
     selectBooks = () => {
-        console.log("Count is: " + this.state.count);
         fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=select&key=${apiKey}`)
             .then(response => response.json())
             .then((data) => {
@@ -112,11 +109,19 @@ class App extends Component {
             });
     };
 
+    getInitialAPIKey = () => {
+        if(!apiKey){
+            fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?requestKey`)
+                .then(resp => resp.json())
+                .then(data => localStorage.setItem("API-Key", data.key))
+        }
+    };
+
     render() {
         return (
             <div className="App">
                 <Header/>
-                <KeyStorage/>
+                <KeyStorage />
                 <ErrorNotification count={this.state.count}/>
                 <div className="container">
                     <div className="row form-section">

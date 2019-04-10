@@ -1,24 +1,19 @@
-import React, { Component } from 'react'
+import React from 'react';
 
-export class KeyStorage extends Component {
+const KeyStorage = () => {
+    const getNewAPIKey = () => {
 
-    getAPIKey = () => {
         fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?requestKey`)
-        .then(resp => resp.json())
-        .then(data => localStorage.setItem("API-Key", data.key))
+            .then(resp => resp.json())
+            .then(data => localStorage.setItem("API-Key", data.key))
+        console.log("New APIKey generated: " + localStorage.getItem("API-Key"));
     };
 
-    componentDidMount(){
-        this.getAPIKey();
-    }
-
-  render() {
     return (
-      <button onClick={this.getAPIKey} className="btn btn-success ml-5">
-        Generera ny API-Nyckel
-      </button>
+        <button onClick={getNewAPIKey} type="button" className="btn btn-success ml-5">
+            Generera ny API-Nyckel
+        </button>
     )
-  }
-}
+};
 
 export default KeyStorage
