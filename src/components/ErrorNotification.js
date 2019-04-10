@@ -1,12 +1,11 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export class ErrorNotification extends Component {
+const ErrorNotification = (props) => {
+    return (
+        <div>
+            {props.count > 0 ? <div>Operationen misslyckades {props.count} gång(er).</div> : <div>Operationen lyckades på första försöket.</div> }
+        </div>
+    )
+};
 
-    render() {
-        return (
-            <div>Operationen lyckades efter {this.props.count} gånger.</div>
-        )
-    }
-}
-
-export default ErrorNotification
+export default ErrorNotification;

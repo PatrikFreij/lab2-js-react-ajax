@@ -1,95 +1,126 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import Header from './components/ui/Header/Header'
 import Library from './components/Library';
 import AddBook from './components/AddBook';
 import KeyStorage from './components/KeyStorage';
 import ErrorNotification from './components/ErrorNotification';
 
-let count = 1;
 const apiKey = localStorage.getItem("API-Key");
-// const apiKey = "kJ0Ha";
+
 
 class App extends Component {
 
-    state = {
-        books: [],
-        error: false
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            books: [],
+            count: 0,
+            success: false
+        }
     }
 
     componentDidMount = () => {
         this.selectBooks();
-    }
+    };
 
     addBook = (title, author) => {
+        if (this.state.success) {
+            this.setState({success: false, count: 0});
+        }
+
         fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=insert&key=${apiKey}&title=${title}&author=${author}`)
             .then(resp => resp.json())
             .then((data) => {
-                if (data.status !== "success" && count <= 10) {
-                    this.setState({ error: true });
+                if (data.status !== "success" && this.state.count < 10) {
                     this.addBook(title, author);
-                    count++;
-                    console.log("add book count: " + count);
+                    this.setState({count: this.state.count + 1});
+                } else if (this.state.count < 10) {
+                    this.setState({success: true});
+                    this.selectBooks();
                 }
-                this.selectBooks();
             });
-    }
+    };
 
     delBook = (id) => {
+
+        if (this.state.success) {
+            this.setState({success: false, count: 0});
+        }
+
         fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=delete&key=${apiKey}&id=${id}`)
             .then(resp => resp.json())
             .then((data) => {
-                if (data.status !== "success" && count <= 10) {
-                    this.setState({ error: true });
-                    count++;
+                if (data.status !== "success" && this.state.count < 10) {
+                    this.setState({count: this.state.count + 1});
                     this.delBook(id);
+                } else {
+                    this.setState({success: true});
+                    this.selectBooks();
                 }
-                count = 0;
-                this.selectBooks();
             });
-    }
+    };
 
     modifyBook = (title, author, id) => {
-        console.log(title, author, id);
+        console.log("Title: " + title);
+
+        if(title === ""){
+            for (let i = 0; i < this.state.books.length; i++) {
+                if (this.state.books[i].id === id) {
+                    title = this.state.books[i].title;
+                }
+            }
+        }
+
+        if(author === ""){
+            for (let i = 0; i < this.state.books.length; i++) {
+                if (this.state.books[i].id === id) {
+                    author = this.state.books[i].author;
+                }
+            }
+        }
+
+        if (this.state.success) {
+            this.setState({success: false, count: 0});
+        }
+
         fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=update&key=${apiKey}&id=${id}&title=${title}&author=${author}`)
             .then(resp => resp.json())
             .then((data) => {
-                if (data.status !== "success" && count <= 10) {
-                    this.setState({ error: true });
+                if (data.status !== "success" && this.state.count < 10) {
+                    this.setState({count: this.state.count + 1});
                     this.modifyBook(title, author, id);
-                    count++;
-                    console.log("modify book count: " + count);
+                } else if (this.state.count < 10) {
+                    this.setState({success: true});
+                    this.selectBooks();
                 }
-                this.selectBooks();
             });
-    }
+    };
 
     selectBooks = () => {
+        console.log("Count is: " + this.state.count);
         fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?op=select&key=${apiKey}`)
             .then(response => response.json())
             .then((data) => {
-                if (data.status !== "success" && count <= 10) {
-                    this.setState({ error: true });
-                    count++;
-                    console.log("select book count: " + count);
+                if (data.status !== "success" && this.state.count < 10) {
+                    this.setState({count: this.state.count + 1});
                     this.selectBooks();
-                } else {
-                    count = 0;
-                    this.setState({ books: data.data });
+                } else if (this.state.count < 10) {
+                    this.setState({success: true});
+                    this.setState({books: data.data});
                 }
-
             });
     };
 
     render() {
-        console.log("Sidan laddades");
         return (
             <div className="App">
-                <Header />
-                <KeyStorage />
-                <ErrorNotification count={count} />
+                <Header/>
+                <KeyStorage/>
+                <ErrorNotification count={this.state.count}/>
                 <div className="container">
                     <div className="row form-section">
-                        <AddBook addBook={this.addBook} />
+                        <AddBook addBook={this.addBook}/>
                     </div>
                 </div>
                 <div className="display-books">
@@ -97,7 +128,7 @@ class App extends Component {
                         <div className="col-12">
                             <ul className="list-group">
                                 <Library delBook={this.delBook} books={this.state.books}
-                                modifyBook={this.modifyBook} />
+                                         modifyBook={this.modifyBook}/>
                             </ul>
                         </div>
                     </div>
