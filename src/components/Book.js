@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 class Book extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -12,11 +12,11 @@ class Book extends Component {
         };
     }
 
-    onChangeTitle = (e) => this.setState({ title: e.target.value });
-    onChangeAuthor = (e) => this.setState({ author: e.target.value });
+    onChangeTitle = (e) => this.setState({title: e.target.value});
+    onChangeAuthor = (e) => this.setState({author: e.target.value});
 
     render() {
-        const { id, title, author} = this.props.book;
+        const {id, title, author} = this.props.book;
         return (
             <li className="list-item list-group-item d-flex align-items-center">
                 {
@@ -27,24 +27,23 @@ class Book extends Component {
                         </div>
                         :
                         <div className="title-author-container">
-                            <div><input placeholder={title} onChange={this.onChangeTitle} /></div>
-                            <div><input placeholder={author} onChange={this.onChangeAuthor} /></div>
+                            <div><input placeholder={title} onChange={this.onChangeTitle}/></div>
+                            <div><input placeholder={author} onChange={this.onChangeAuthor}/></div>
                         </div>
                 }
                 <div className="buttons">
                     {
                         this.state.change === false ?
-                            <button type="button" onClick={() => this.setState({ change: !this.state.change })} className="btn btn-success">Editera</button>
+                            <button type="button" onClick={() => this.setState({change: !this.state.change})}
+                                    className="btn btn-success">Editera</button>
                             :
                             <button onClick={() => {
-                                this.setState({ change: !this.state.change });
+                                this.setState({change: !this.state.change});
                                 this.props.modifyBook(this.state.title, this.state.author, id);
-                                this.setState({ title: '', author: '' });
-
-                            }
-                            } type="button" className="btn btn-success">
+                                this.setState({title: '', author: ''});
+                            }} type="button" className="btn btn-success">
                                 Spara
-                    </button>
+                            </button>
                     }
                     <button onClick={this.props.delBook.bind(this, id)} type="button" className="btn btn-danger">
                         Ta bort

@@ -67,7 +67,8 @@ header strong {
 }
 
 .title-author-container {
-  flex: 1 1 0%;
+  /*flex: 1 1 0%;*/
+  flex: auto;
   display: flex;
   justify-content: space-between;
 }

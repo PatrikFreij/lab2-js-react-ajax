@@ -5,10 +5,9 @@ const Library = (props) => {
     return (
         props.books.map((book) => (
             <Book delBook={props.delBook} book={book}
-                modifyBook={props.modifyBook} />
+                  modifyBook={props.modifyBook}/>
         ))
     )
-}
-
+};
 
 export default Library;
