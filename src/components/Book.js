@@ -1,20 +1,24 @@
 import React, { Component } from 'react';
 
-class Book extends React.Component {
+class Book extends Component {
+    constructor(props){
+        super(props);
 
-    state = {
-        change: false,
-        value: '',
-        author: '',
-        id: ''
-    };
+        this.state = {
+            change: false,
+            title: '',
+            author: '',
+            id: ''
+        };
+    }
+
+
 
     onChangeTitle = (e) => this.setState({ title: e.target.value });
     onChangeAuthor = (e) => this.setState({ author: e.target.value });
 
     render() {
-        console.log("En book laddades");
-        const { id, title, author, updated } = this.props.book;
+        const { id, title, author} = this.props.book;
         return (
             <li className="list-item list-group-item d-flex align-items-center">
                 {

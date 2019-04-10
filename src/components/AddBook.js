@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 
-class AddBook extends React.Component{
+class AddBook extends Component{
+    constructor(props){
+        super(props);
 
-    state = {
-        title: '',
-        author: ''
+        this.state = {
+            title: '',
+            author: ''
+        }
     }
 
     onSubmit = (e) => {
         e.preventDefault();
         this.props.addBook(this.state.title, this.state.author);
         this.setState({title: '', author: ''});
-    }
+    };
 
     onChangeTitle = (e) => this.setState({title: e.target.value});
     onChangeAuthor = (e) => this.setState({author: e.target.value});
