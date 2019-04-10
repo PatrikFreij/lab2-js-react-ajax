@@ -2,10 +2,9 @@ import React from 'react';
 
 const KeyStorage = () => {
     const getNewAPIKey = () => {
-
         fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?requestKey`)
             .then(resp => resp.json())
-            .then(data => localStorage.setItem("API-Key", data.key))
+            .then(data => localStorage.setItem("API-Key", data.key));
         console.log("New APIKey generated: " + localStorage.getItem("API-Key"));
     };
 
