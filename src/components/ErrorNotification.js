@@ -2,8 +2,8 @@ import React from 'react'
 
 const ErrorNotification = (props) => {
     return (
-        <div>
-            {props.count > 0 ? <div>Operationen misslyckades {props.count} gång(er).</div> : <div>Operationen lyckades på första försöket.</div> }
+        <div className="error-notification">
+            {props.count > 0 ? <h4>Operationen misslyckades {props.count} gång(er).</h4> : <h4>Operationen lyckades på första försöket.</h4> }
         </div>
     )
 };

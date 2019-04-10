@@ -72,11 +72,6 @@ header strong {
   justify-content: space-between;
 }
 
-.title,
-.author {
-  
-}
-
 .list-item .buttons {
   flex: 1 1 15%;
   display: flex;
@@ -85,4 +80,9 @@ header strong {
 
 .list-item .buttons button {
   margin-left: 10px;
+}
+
+.error-notification {
+  color: red;
+  margin-top: 15px;
 }
