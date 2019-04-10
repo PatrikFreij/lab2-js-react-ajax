@@ -86,3 +86,7 @@ header strong {
   color: red;
   margin-top: 15px;
 }
+
+.success {
+  color: chartreuse;
+}

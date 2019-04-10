@@ -12,8 +12,6 @@ class Book extends Component {
         };
     }
 
-
-
     onChangeTitle = (e) => this.setState({ title: e.target.value });
     onChangeAuthor = (e) => this.setState({ author: e.target.value });
 
